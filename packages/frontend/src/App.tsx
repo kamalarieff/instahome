@@ -18,12 +18,13 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <main className="App-header flex space-y-2">
         <img src={logo} className="App-logo" alt="logo" />
         <p>Hello Vite + React!</p>
         <select
           id="buyers"
           name="buyers"
+          className="text-black"
           onChange={(e) => {
             setBuyer(e.target.value);
           }}
@@ -34,31 +35,55 @@ function App() {
             </option>
           ))}
         </select>
-        <p>
-          <button
-            type="button"
-            onClick={() => setCount((count) => [...count, "standard"])}
-          >
-            add standard
-          </button>
-          <button
-            type="button"
-            onClick={() => setCount((count) => [...count, "featured"])}
-          >
-            add featured
-          </button>
-          <button
-            type="button"
-            onClick={() => setCount((count) => [...count, "premium"])}
-          >
-            add premium
-          </button>
-        </p>
+        <div className="flex-col space-y-2">
+          <div className="flex space-x-2">
+            <button
+              type="button"
+              onClick={() => setCount((count) => [...count, "standard"])}
+            >
+              add standard
+            </button>
+            <button
+              type="button"
+              onClick={() => setCount((count) => [...count, "standard"])}
+            >
+              remove standard
+            </button>
+          </div>
+          <div className="flex space-x-2">
+            <button
+              type="button"
+              onClick={() => setCount((count) => [...count, "featured"])}
+            >
+              add featured
+            </button>
+            <button
+              type="button"
+              onClick={() => setCount((count) => [...count, "featured"])}
+            >
+              remove featured
+            </button>
+          </div>
+          <div className="flex space-x-2">
+            <button
+              type="button"
+              onClick={() => setCount((count) => [...count, "premium"])}
+            >
+              add premium
+            </button>
+            <button
+              type="button"
+              onClick={() => setCount((count) => [...count, "premium"])}
+            >
+              remove premium
+            </button>
+          </div>
+        </div>
         <div>
           Chosen values: <pre>{count}</pre>{" "}
         </div>
         <p>Total is: {calculateTotal(buyer, count)}</p>
-      </header>
+      </main>
     </div>
   );
 }
