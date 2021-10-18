@@ -1,0 +1,71 @@
+# isEligible is a good way to do it as well
+# you need an aggregate function for the standard and the conditional
+
+# make sure to test what happens when you have 6
+uem sunrise:
+    - standard:
+        type: xfory
+        from: 3
+        to: 2
+    - featured
+    - premium
+
+sime darby:
+    - standard
+    - featured:
+        type: discount
+        from: 322.99
+        to: 299.99
+    - premium
+
+igb berhad:
+    - standard
+    - featured
+    - premium:
+        type: discountconditional
+        condition: >=4
+        from: 394.99
+        to: 379.99
+
+mah sing:
+    - standard:
+        - offers:
+            - xfory:
+                from: 5
+                to: 4
+    - featured:
+        - offers:
+            - discount:
+                from: 322.99
+                to: 309.99
+    - premium:
+        - offers:
+            - discountconditional:
+                condition: >=3
+                from: 394.99
+                to: 389.99
+
+# I'm not sure if this is supported
+# But I think don't have to implement this yet. Otherwise, it will be too complex
+# because we don't have to implement it, we can make the structure simpler by
+# Removing the offers layer
+yoghirt:
+    - standard:
+        - offers:
+            - xfory:
+                from: 5
+                to: 4
+    - featured:
+        - offers:
+            - xfory:
+                from: 5
+                to: 4
+            - discount:
+                from: 322.99
+                to: 309.99
+    - premium:
+        - offers:
+            - discountconditional:
+                condition: >=3
+                from: 394.99
+                to: 389.99
