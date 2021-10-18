@@ -1,45 +1,66 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+
+import { calculateTotal } from "./utils";
+
+const buyers = [
+  "fake company",
+  "uem sunrise",
+  "sime darby",
+  "igb berhad",
+  "mah sing group",
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState<string[]>([]);
+  const [buyer, setBuyer] = useState<string>();
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>Hello Vite + React!</p>
+        <select
+          id="buyers"
+          name="buyers"
+          onChange={(e) => {
+            setBuyer(e.target.value);
+          }}
+        >
+          {buyers.map((buyer) => (
+            <option key={buyer} value={buyer}>
+              {buyer}
+            </option>
+          ))}
+        </select>
         <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
+          <button
+            type="button"
+            onClick={() => setCount((count) => [...count, "standard"])}
+          >
+            add standard
+          </button>
+          <button
+            type="button"
+            onClick={() => setCount((count) => [...count, "featured"])}
+          >
+            add featured
+          </button>
+          <button
+            type="button"
+            onClick={() => setCount((count) => [...count, "premium"])}
+          >
+            add premium
           </button>
         </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
+        <div>
+          Chosen values: <pre>{count}</pre>{" "}
+        </div>
+        <p>Total is: {calculateTotal(buyer, count)}</p>
       </header>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
