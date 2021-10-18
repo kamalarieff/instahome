@@ -74,7 +74,7 @@ function groupCartCountById(cart: string[]) {
 }
 
 function calculateTotal(companyId: string | undefined, cart: string[]) {
-  let groupedCart = groupCartCountById(cart);
+  const groupedCart = groupCartCountById(cart);
   // this is to check if the companyId is given
   let rules = companyId ? specialRules[companyId] : normalRules;
   // this is to check if the company exists
