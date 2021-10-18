@@ -1,6 +1,16 @@
 import { calculateTotal } from "..";
 
 describe("rules for all companies", () => {
+  it("should return the correct sum for no company", () => {
+    let input = ["standard", "featured", "premium"];
+    expect(calculateTotal(null, input)).toEqual(987.97);
+  });
+
+  it("should return the correct sum for company that does not exist in the rules", () => {
+    let input = ["standard", "featured", "premium"];
+    expect(calculateTotal("fake company", input)).toEqual(987.97);
+  });
+
   it("should return the correct sum for uem sunrise", () => {
     let input = ["standard", "standard"];
     expect(calculateTotal("uem sunrise", input)).toEqual(539.98);

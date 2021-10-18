@@ -1,7 +1,7 @@
 import { NORMAL_PRICE } from "./constants";
 
 // TODO: if possible, create a function that builds this from an API
-const rules = {
+const specialRules = {
   // this may change so just work with it for now
   // TODO: don't match against string. Use an id instead
   "uem sunrise": {
@@ -63,17 +63,22 @@ function groupCartCountById(cart) {
 
 function calculateTotal(companyId, cart) {
   cart = groupCartCountById(cart);
-  const companyRules = rules[companyId];
+  let rules = specialRules[companyId];
+  // TODO: make this better
+  if (rules == null) {
+    rules = normalRules;
+  }
+
   let sum = 0;
 
   for (const property in cart) {
     sum +=
       // TODO: find a better way to do this
-      companyRules[property] != null
-        ? companyRules[property](cart[property])
+      rules[property] != null
+        ? rules[property](cart[property])
         : normalRules[property](cart[property]);
   }
   return sum;
 }
 
-export { rules, calculateTotal };
+export { specialRules, calculateTotal };
