@@ -1,7 +1,14 @@
 import { NORMAL_PRICE } from "./constants";
 
+interface SpecialRulesType {
+  [key: string]: {
+    // TODO: make this key index to be constant
+    [key: string]: (cartCount: number) => number;
+  };
+}
+
 // TODO: if possible, create a function that builds this from an API
-const specialRules = {
+const specialRules: SpecialRulesType = {
   // this may change so just work with it for now
   // TODO: don't match against string. Use an id instead
   "uem sunrise": {
@@ -9,7 +16,7 @@ const specialRules = {
     // maybe you would have to group them up first, the problem with that
     // is that it could be not performant, because you would have to do this on every input and output
     // one way to do it is to store it already grouped up. No need to store it as an array
-    standard: function (cartCount) {
+    standard: function (cartCount: number) {
       const isEligible = cartCount >= 3;
 
       if (!isEligible) {
@@ -21,12 +28,12 @@ const specialRules = {
     },
   },
   "sime darby": {
-    featured: function (cartCount) {
+    featured: function (cartCount: number) {
       return cartCount * 299.99;
     },
   },
   "igb berhad": {
-    premium: function (cartCount) {
+    premium: function (cartCount: number) {
       const isEligible = cartCount >= 4;
 
       if (!isEligible) {
@@ -39,20 +46,25 @@ const specialRules = {
   },
 };
 
-const normalRules = {
-  standard: function (cartCount) {
+interface NormalRulesType {
+  // TODO: make this key index to be constant
+  [key: string]: (cartCount: number) => number;
+}
+
+const normalRules: NormalRulesType = {
+  standard: function (cartCount: number) {
     return cartCount * NORMAL_PRICE["standard"];
   },
-  featured: function (cartCount) {
+  featured: function (cartCount: number) {
     return cartCount * NORMAL_PRICE["featured"];
   },
-  premium: function (cartCount) {
+  premium: function (cartCount: number) {
     return cartCount * NORMAL_PRICE["premium"];
   },
 };
 
-function groupCartCountById(cart) {
-  return cart.reduce((previous, current) => {
+function groupCartCountById(cart: string[]) {
+  return cart.reduce((previous: Record<string, number>, current) => {
     return {
       ...previous,
       [current]:
@@ -61,9 +73,11 @@ function groupCartCountById(cart) {
   }, {});
 }
 
-function calculateTotal(companyId, cart) {
-  cart = groupCartCountById(cart);
-  let rules = specialRules[companyId];
+function calculateTotal(companyId: string | undefined, cart: string[]) {
+  let groupedCart = groupCartCountById(cart);
+  // this is to check if the companyId is given
+  let rules = companyId ? specialRules[companyId] : normalRules;
+  // this is to check if the company exists
   // TODO: make this better
   if (rules == null) {
     rules = normalRules;
@@ -71,12 +85,12 @@ function calculateTotal(companyId, cart) {
 
   let sum = 0;
 
-  for (const property in cart) {
+  for (const property in groupedCart) {
     sum +=
       // TODO: find a better way to do this
       rules[property] != null
-        ? rules[property](cart[property])
-        : normalRules[property](cart[property]);
+        ? rules[property](groupedCart[property])
+        : normalRules[property](groupedCart[property]);
   }
   return sum;
 }
