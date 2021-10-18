@@ -51,7 +51,7 @@ const normalRules = {
   },
 };
 
-function groupById(cart) {
+function groupCartCountById(cart) {
   return cart.reduce((previous, current) => {
     return {
       ...previous,
@@ -62,7 +62,7 @@ function groupById(cart) {
 }
 
 function calculateTotal(companyId, cart) {
-  cart = groupById(cart);
+  cart = groupCartCountById(cart);
   const companyRules = rules[companyId];
   let sum = 0;
 
