@@ -1,5 +1,4 @@
 import { useReducer, useState } from "react";
-import produce from "immer";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -13,43 +12,46 @@ const buyers = [
   "mah sing group",
 ];
 
-function reducer(state: string[], action: { type: string }) {
-  return produce(state, (draft) => {
-    switch (action.type) {
-      case "ADD_STANDARD": {
-        draft.push("standard");
-        break;
-      }
-      // TODO: I don't think this is the best way to structure the data
-      // Find a better way to do this
-      case "REMOVE_STANDARD": {
-        const index = state.indexOf("standard");
-        if (index == -1) break;
-        draft.splice(index, 1);
-        break;
-      }
-      case "ADD_FEATURED": {
-        draft.push("featured");
-        break;
-      }
-      case "REMOVE_FEATURED": {
-        const index = state.indexOf("featured");
-        if (index == -1) break;
-        draft.splice(index, 1);
-        break;
-      }
-      case "ADD_PREMIUM": {
-        draft.push("premium");
-        break;
-      }
-      case "REMOVE_PREMIUM": {
-        const index = state.indexOf("premium");
-        if (index == -1) break;
-        draft.splice(index, 1);
-        break;
-      }
+const INITIAL_STATE: string[] = [];
+
+function reducer(state: typeof INITIAL_STATE, action: { type: string }) {
+  switch (action.type) {
+    case "ADD_STANDARD": {
+      return [...state, "standard"];
     }
-  });
+    // TODO: I don't think this is the best way to structure the data
+    // Find a better way to do this
+    case "REMOVE_STANDARD": {
+      const copy = [...state];
+      const index = state.indexOf("standard");
+      if (index == -1) return copy;
+      copy.splice(index, 1);
+      return copy;
+    }
+    case "ADD_FEATURED": {
+      return [...state, "featured"];
+    }
+    case "REMOVE_FEATURED": {
+      const copy = [...state];
+      const index = state.indexOf("featured");
+      if (index == -1) return copy;
+      copy.splice(index, 1);
+      return copy;
+    }
+    case "ADD_PREMIUM": {
+      return [...state, "premium"];
+    }
+    case "REMOVE_PREMIUM": {
+      const copy = [...state];
+      const index = state.indexOf("premium");
+      if (index == -1) return copy;
+      copy.splice(index, 1);
+      return copy;
+    }
+    default: {
+      return state;
+    }
+  }
 }
 
 function App() {
