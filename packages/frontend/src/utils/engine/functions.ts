@@ -5,7 +5,7 @@ import type {
   Discount,
   DiscountConditional,
 } from "@instahome/types";
-import { specialRules, normalRules } from "./rules";
+import { normalRules } from "./rules";
 import { NORMAL_PRICE } from "utils/constants";
 
 /**
@@ -32,41 +32,10 @@ function groupCartCountById(cart: string[]) {
 }
 
 /**
- * @description Get the sum from of the cart based on the company id
+ * @description Type guard to check for valid ad type
  *
- * @param companyId Company id
- * @param cart List of products
- * @example
- * calculateTotal("uem sunrise", [
- *   "standard",
- *   "featured",
- *   "premium",
- * ])
- * //=> 999.99
+ * @param adId Ad id that is unknown during compile time
  */
-function calculateTotal(companyId: string | undefined, cart: string[]) {
-  const groupedCart = groupCartCountById(cart);
-  // this is to check if the companyId is given
-  let rules = companyId ? specialRules[companyId] : normalRules;
-  // this is to check if the company exists
-  // TODO: make this better
-  if (rules == null) {
-    rules = normalRules;
-  }
-
-  let sum = 0;
-
-  for (const property in groupedCart) {
-    sum +=
-      // TODO: find a better way to do this
-      rules[property] != null
-        ? rules[property](groupedCart[property])
-        : normalRules[property](groupedCart[property]);
-  }
-  return sum;
-}
-
-// type guard to check for valid ad type
 function isAdIdType(adId: unknown): adId is ADID_TYPE {
   // TODO: not sure if this is the best way to do this
   return (
@@ -75,10 +44,22 @@ function isAdIdType(adId: unknown): adId is ADID_TYPE {
   );
 }
 
+/**
+ * @description Get the sum from of the cart based on the rules given
+ *
+ * @param cart List of products
+ * @param rules Rules object
+ * @example
+ * const rules = {...};
+ * calculateTotalByRules([
+ *   "standard",
+ *   "featured",
+ *   "premium",
+ * ], rules);
+ * //=> 999.99
+ */
 function calculateTotalByRules(cart: string[], rules: NormalRulesType) {
   const groupedCart = groupCartCountById(cart);
-  // this is to check if the companyId is given
-
   let sum = 0;
 
   for (const property in groupedCart) {
@@ -207,9 +188,4 @@ function convertAPItoRules(rules: (XForY | Discount | DiscountConditional)[]) {
   }, normalRules);
 }
 
-export {
-  specialRules,
-  calculateTotal,
-  calculateTotalByRules,
-  convertAPItoRules,
-};
+export { calculateTotalByRules, convertAPItoRules };

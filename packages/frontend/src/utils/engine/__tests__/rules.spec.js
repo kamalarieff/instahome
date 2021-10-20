@@ -1,20 +1,23 @@
-import { specialRules } from "../rules";
 import { calculateTotalByRules, convertAPItoRules } from "../functions";
 
-it.skip("should have the correct structure for the special rules object", () => {
-  expect(specialRules).toMatchInlineSnapshot(`
-    Object {
-      "igb berhad": Object {
-        "premium": [Function],
-      },
-      "sime darby": Object {
-        "featured": [Function],
-      },
-      "uem sunrise": Object {
-        "standard": [Function],
-      },
-    }
-  `);
+it("should transform API response to correct rules structure when none is given", () => {
+  const APIResponse = [];
+  const rules = convertAPItoRules(APIResponse);
+
+  let input = ["standard"];
+  expect(calculateTotalByRules(input, rules)).toEqual(269.99);
+
+  input = ["standard", "standard"];
+  expect(calculateTotalByRules(input, rules)).toEqual(539.98);
+
+  input = ["standard", "standard", "standard"];
+  expect(calculateTotalByRules(input, rules)).toEqual(809.97);
+
+  input = ["standard", "standard", "standard", "standard"];
+  expect(calculateTotalByRules(input, rules)).toEqual(1079.96);
+
+  input = ["standard", "featured", "premium"];
+  expect(calculateTotalByRules(input, rules)).toEqual(987.97);
 });
 
 it("should transform API response to correct rules structure for xfory", () => {

@@ -1,6 +1,1 @@
-export {
-  specialRules,
-  calculateTotal,
-  calculateTotalByRules,
-  convertAPItoRules,
-} from "./functions";
+export { calculateTotalByRules, convertAPItoRules } from "./functions";
