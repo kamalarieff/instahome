@@ -34,4 +34,9 @@ declare module "@instahome/types" {
     eligibleLimit: number;
     newPrice: number;
   }
+
+  interface Company {
+    id: number;
+    name: string;
+  }
 }

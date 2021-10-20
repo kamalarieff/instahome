@@ -1,9 +1,14 @@
 import express from "express";
-import type { XForY, Discount, DiscountConditional } from "@instahome/types";
+import type {
+  XForY,
+  Discount,
+  DiscountConditional,
+  Company,
+} from "@instahome/types";
 
 const router = express.Router();
 
-const companies = [
+const companies: Company[] = [
   { id: 1, name: "uem sunrise" },
   { id: 2, name: "sime darby" },
   { id: 3, name: "igb berhad" },

@@ -1,6 +1,11 @@
 import { useReducer, useState } from "react";
 import { useQuery } from "react-query";
-import type { XForY, Discount, DiscountConditional } from "@instahome/types";
+import type {
+  XForY,
+  Discount,
+  DiscountConditional,
+  Company,
+} from "@instahome/types";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -52,8 +57,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, []);
   const [buyer, setBuyer] = useState<string>();
 
-  // TODO: fix type
-  const { data: companyList = [], isSuccess } = useQuery(
+  const { data: companyList = [], isSuccess } = useQuery<Company[]>(
     ["companies"],
     async function fetchCompanies() {
       const res = await fetch("http://localhost:3001/api/v1/companies");
