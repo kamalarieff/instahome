@@ -1,5 +1,18 @@
 import { specialRules, normalRules } from "./rules";
 
+/**
+ * @description get the count of products based on the id
+ *
+ * @param cart List of products
+ * @example
+ * groupCartCountById([
+ *   "standard",
+ *   "featured",
+ *   "premium",
+ *   "standard",
+ * ])
+ * //=> { standard: 2, featured: 1, premium: 1 }
+ */
 function groupCartCountById(cart: string[]) {
   return cart.reduce((previous: Record<string, number>, current) => {
     return {
@@ -10,6 +23,19 @@ function groupCartCountById(cart: string[]) {
   }, {});
 }
 
+/**
+ * @description Get the sum from of the cart based on the company id
+ *
+ * @param companyId Company id
+ * @param cart List of products
+ * @example
+ * calculateTotal("uem sunrise", [
+ *   "standard",
+ *   "featured",
+ *   "premium",
+ * ])
+ * //=> 999.99
+ */
 function calculateTotal(companyId: string | undefined, cart: string[]) {
   const groupedCart = groupCartCountById(cart);
   // this is to check if the companyId is given
