@@ -1,15 +1,7 @@
 declare module "@instahome/types" {
   type ADID_TYPE = "standard" | "featured" | "premium";
 
-  interface SpecialRulesType {
-    [key: string]: {
-      // TODO: make this key index to be constant
-      [key: string]: (cartCount: number) => number;
-    };
-  }
-
   type NormalRulesType = {
-    // TODO: make this key index to be constant
     [key in ADID_TYPE]: (cartCount: number) => number;
   };
 
