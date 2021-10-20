@@ -5,8 +5,8 @@
 uem sunrise:
     - standard:
         type: xfory
-        from: 3
-        to: 2
+        eligibleLimit: 3
+        reduceCountBy: 2
     - featured
     - premium
 

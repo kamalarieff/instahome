@@ -1,4 +1,5 @@
 import { specialRules, normalRules } from "./rules";
+import { NORMAL_PRICE } from "utils/constants";
 
 /**
  * @description get the count of products based on the id
@@ -58,4 +59,83 @@ function calculateTotal(companyId: string | undefined, cart: string[]) {
   return sum;
 }
 
-export { specialRules, calculateTotal };
+// type guard to check for valid ad type
+function isAdIdType(adId: unknown): adId is ADID_TYPE {
+  // TODO: not sure if this is the best way to do this
+  return (
+    typeof adId === "string" &&
+    ["standard", "featured", "premium"].includes(adId)
+  );
+}
+
+function calculateTotalByRules(cart: string[], rules: NormalRulesType) {
+  const groupedCart = groupCartCountById(cart);
+  // this is to check if the companyId is given
+
+  let sum = 0;
+
+  for (const property in groupedCart) {
+    // TODO: need to add a check here to check against the ADID_TYPE
+    if (isAdIdType(property)) sum += rules[property](groupedCart[property]);
+  }
+  return sum;
+}
+
+function convertAPItoRules(input: (XForY | Discount | DiscountConditional)[]) {
+  return input.reduce((previous, current) => {
+    // this sorta acts like a type guard
+    if (current.type == "xfory") {
+      return {
+        ...previous,
+        ...{
+          [current.adId]: function (cartCount: number) {
+            const isEligible = cartCount >= current.eligibleLimit;
+
+            if (!isEligible) {
+              return cartCount * NORMAL_PRICE["standard"];
+            }
+
+            // this wouldn't work for more than 3 items
+            return (
+              (cartCount - current.reduceCountBy) * NORMAL_PRICE["standard"]
+            );
+          },
+        },
+      };
+    }
+    if (current.type == "discount") {
+      return {
+        ...previous,
+        ...{
+          [current.adId]: function (cartCount: number) {
+            return cartCount * current.newPrice;
+          },
+        },
+      };
+    }
+    if (current.type == "discountconditional") {
+      return {
+        ...previous,
+        ...{
+          [current.adId]: function (cartCount: number) {
+            const isEligible = cartCount >= current.eligibleLimit;
+
+            if (!isEligible) {
+              return cartCount * NORMAL_PRICE["premium"];
+            }
+
+            return cartCount * current.newPrice;
+          },
+        },
+      };
+    }
+    return previous;
+  }, normalRules);
+}
+
+export {
+  specialRules,
+  calculateTotal,
+  calculateTotalByRules,
+  convertAPItoRules,
+};
