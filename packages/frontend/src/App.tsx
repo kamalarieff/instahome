@@ -73,8 +73,6 @@ function App() {
     { initialData: [], enabled: buyer != null }
   );
 
-  // TODO: need to handle onLoad when no option is given
-  // right now it is defaulted to use the normal rules
   const rules = convertAPItoRules(companyData);
 
   return (
@@ -82,21 +80,23 @@ function App() {
       <main className="App-header flex space-y-2">
         <img src={logo} className="App-logo" alt="logo" />
         <p>Hello Vite + React!</p>
-        <select
-          id="buyers"
-          name="buyers"
-          className="text-black"
-          onChange={(e) => {
-            setBuyer(e.target.value);
-          }}
-        >
-          {isSuccess &&
-            companyList.map((buyer) => (
+        {isSuccess && (
+          <select
+            id="buyers"
+            name="buyers"
+            className="text-black"
+            onChange={(e) => {
+              setBuyer(e.target.value);
+            }}
+            defaultValue={0}
+          >
+            {[...companyList, { id: 0, name: "none" }].map((buyer) => (
               <option key={buyer.id} value={buyer.id}>
                 {buyer.name}
               </option>
             ))}
-        </select>
+          </select>
+        )}
         <div className="flex-col space-y-2">
           <div className="flex space-x-2">
             <button
