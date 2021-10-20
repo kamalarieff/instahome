@@ -1,3 +1,4 @@
+import type { SpecialRulesType, NormalRulesType } from "@instahome/types";
 import { NORMAL_PRICE } from "utils/constants";
 
 const specialRules: SpecialRulesType = {

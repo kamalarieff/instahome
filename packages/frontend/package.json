@@ -9,6 +9,7 @@
     "tsc": "tsc --build"
   },
   "dependencies": {
+    "@instahome/types": "../types",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-query": "^3.27.0"

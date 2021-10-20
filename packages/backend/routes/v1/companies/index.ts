@@ -1,4 +1,6 @@
 import express from "express";
+import type { XForY, Discount, DiscountConditional } from "@instahome/types";
+
 const router = express.Router();
 
 const companies = [
@@ -7,30 +9,6 @@ const companies = [
   { id: 3, name: "igb berhad" },
   { id: 4, name: "mah sing group" },
 ];
-
-// TODO: this is copied from the front end
-// Maybe you can put this in a lerna package instead
-type ADID_TYPE = "standard" | "featured" | "premium";
-
-interface XForY {
-  adId: ADID_TYPE;
-  type: "xfory";
-  eligibleLimit: number;
-  reduceCountBy: number;
-}
-
-interface Discount {
-  adId: ADID_TYPE;
-  type: "discount";
-  newPrice: number;
-}
-
-interface DiscountConditional {
-  adId: ADID_TYPE;
-  type: "discountconditional";
-  eligibleLimit: number;
-  newPrice: number;
-}
 
 type DataType = { [key: number]: (XForY | Discount | DiscountConditional)[] };
 
@@ -79,11 +57,12 @@ const data: DataType = {
   ],
 };
 
-/* GET companies offer details. */
+/* GET list of companies. */
 router.get("/", function (_, res) {
   res.json(companies);
 });
 
+/* GET companies offer details. */
 router.get("/:id", function (req, res) {
   res.json(data[parseInt(req.params.id)]);
 });

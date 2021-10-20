@@ -6,6 +6,7 @@
     "start": "PORT=3001 nodemon index.ts"
   },
   "dependencies": {
+    "@instahome/types": "../types",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",

@@ -1,3 +1,10 @@
+import type {
+  ADID_TYPE,
+  NormalRulesType,
+  XForY,
+  Discount,
+  DiscountConditional,
+} from "@instahome/types";
 import { specialRules, normalRules } from "./rules";
 import { NORMAL_PRICE } from "utils/constants";
 

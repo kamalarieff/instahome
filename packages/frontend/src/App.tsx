@@ -1,5 +1,6 @@
 import { useReducer, useState } from "react";
 import { useQuery } from "react-query";
+import type { XForY, Discount, DiscountConditional } from "@instahome/types";
 import logo from "./logo.svg";
 import "./App.css";
 
