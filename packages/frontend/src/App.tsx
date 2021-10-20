@@ -1,10 +1,12 @@
 import { useReducer, useState } from "react";
 import { useQuery } from "react-query";
 import type { Company, Offers } from "@instahome/types";
-import logo from "./logo.svg";
-import "./App.css";
 
 import { convertAPItoRules, calculateTotalByRules } from "utils/engine";
+import { fetchCompanies, fetchCompanyById } from "apis/companies";
+
+import logo from "./logo.svg";
+import "./App.css";
 
 const INITIAL_STATE: string[] = [];
 
@@ -54,18 +56,16 @@ function App() {
 
   const { data: companyList = [], isSuccess } = useQuery<Company[]>(
     ["companies"],
-    async function fetchCompanies() {
-      const res = await fetch("http://localhost:3001/api/v1/companies");
+    async function () {
+      const res = await fetchCompanies();
       return res.json();
     }
   );
 
   const { data: companyData = [] } = useQuery<Offers[]>(
     ["companyId", buyer],
-    async function fetchCompanyById() {
-      const res = await fetch(
-        `http://localhost:3001/api/v1/companies/${buyer}`
-      );
+    async function () {
+      const res = await fetchCompanyById(buyer);
       return res.json();
     },
     // TODO: if you do this, you might get unexpected behavior where
