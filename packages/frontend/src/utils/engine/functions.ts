@@ -139,52 +139,56 @@ function calculateTotalByRules(cart: string[], rules: NormalRulesType) {
 function convertAPItoRules(rules: (XForY | Discount | DiscountConditional)[]) {
   return rules.reduce((previous, current) => {
     // this sorta acts like a type guard
-    if (current.type == "xfory") {
-      return {
-        ...previous,
-        ...{
-          [current.adId]: function (cartCount: number) {
-            const isEligible = cartCount >= current.eligibleLimit;
+    switch (current.type) {
+      case "xfory": {
+        return {
+          ...previous,
+          ...{
+            [current.adId]: function (cartCount: number) {
+              const isEligible = cartCount >= current.eligibleLimit;
 
-            if (!isEligible) {
-              return cartCount * NORMAL_PRICE["standard"];
-            }
+              if (!isEligible) {
+                return cartCount * NORMAL_PRICE["standard"];
+              }
 
-            // what this means is that once the offer has been applied, it won't be applied again
-            return (
-              (cartCount - current.reduceCountBy) * NORMAL_PRICE["standard"]
-            );
+              // what this means is that once the offer has been applied, it won't be applied again
+              return (
+                (cartCount - current.reduceCountBy) * NORMAL_PRICE["standard"]
+              );
+            },
           },
-        },
-      };
-    }
-    if (current.type == "discount") {
-      return {
-        ...previous,
-        ...{
-          [current.adId]: function (cartCount: number) {
-            return cartCount * current.newPrice;
+        };
+      }
+      case "discount": {
+        return {
+          ...previous,
+          ...{
+            [current.adId]: function (cartCount: number) {
+              return cartCount * current.newPrice;
+            },
           },
-        },
-      };
-    }
-    if (current.type == "discountconditional") {
-      return {
-        ...previous,
-        ...{
-          [current.adId]: function (cartCount: number) {
-            const isEligible = cartCount >= current.eligibleLimit;
+        };
+      }
+      case "discountconditional": {
+        return {
+          ...previous,
+          ...{
+            [current.adId]: function (cartCount: number) {
+              const isEligible = cartCount >= current.eligibleLimit;
 
-            if (!isEligible) {
-              return cartCount * NORMAL_PRICE["premium"];
-            }
+              if (!isEligible) {
+                return cartCount * NORMAL_PRICE["premium"];
+              }
 
-            return cartCount * current.newPrice;
+              return cartCount * current.newPrice;
+            },
           },
-        },
-      };
+        };
+      }
+      default: {
+        return previous;
+      }
     }
-    return previous;
   }, normalRules);
 }
 
