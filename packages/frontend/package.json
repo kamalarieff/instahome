@@ -5,11 +5,13 @@
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "tsc": "tsc --build"
   },
   "dependencies": {
     "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react-dom": "^17.0.0",
+    "react-query": "^3.27.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",

@@ -75,14 +75,81 @@ function calculateTotalByRules(cart: string[], rules: NormalRulesType) {
   let sum = 0;
 
   for (const property in groupedCart) {
-    // TODO: need to add a check here to check against the ADID_TYPE
+    // this is to guard yourself against unwanted ad types
     if (isAdIdType(property)) sum += rules[property](groupedCart[property]);
   }
   return sum;
 }
 
-function convertAPItoRules(input: (XForY | Discount | DiscountConditional)[]) {
-  return input.reduce((previous, current) => {
+/**
+ * @description Takes a list of rules and combine them to be an object rules. This object rules structure
+ * makes it easy to find and apply the offer. It builds on the normal rules object which means it will override
+ * any old ad id with its own. The shape of the rules in the list has to adhere to a certain contract.
+ *
+ * @param rules List of rules
+ * @example
+ * convertAPItoRules([
+ *   {
+ *     adId: "standard"
+ *     type: "xfory",
+ *     eligibleLimit: 3,
+ *     reduceCountBy: 1
+ *   }
+ * ])
+ * //=> {
+ *   standard: function specialStandardRule(),
+ *   featured: function normalFeaturedRule(),
+ *   premium: function normalPremiumRule()
+ * }
+ *
+ * @example
+ * You can give multiple rules here
+ * convertAPItoRules([
+ *   {
+ *     adId: "standard"
+ *     type: "xfory",
+ *     eligibleLimit: 3,
+ *     reduceCountBy: 1
+ *   },
+ *   {
+ *     adId: "featured"
+ *     type: "discount",
+ *     newPrice: 400,
+ *   }
+ * ])
+ * //=> {
+ *   standard: function specialStandardRule(),
+ *   featured: function specialFeaturedRule(),
+ *   premium: function normalPremiumRule()
+ * }
+ *
+ * @todo I'm not sure if we have to implement multiple rules for the same ad type.
+ * For example, if you pass in a list of rules like this:
+ * @example
+ * convertAPItoRules([
+ *   {
+ *     adId: "standard"
+ *     type: "xfory",
+ *     eligibleLimit: 3,
+ *     reduceCountBy: 1
+ *   },
+ *   {
+ *     adId: "standard"
+ *     type: "discount",
+ *     newPrice: 400,
+ *   }
+ * ])
+ * //=> {
+ *   standard: function specialStandardRule(),
+ *   featured: function normalFeaturedRule(),
+ *   premium: function normalPremiumRule()
+ * }
+ *
+ * The final rule object will not apply both standard rule. Instead, the second rule will
+ * override the first one
+ */
+function convertAPItoRules(rules: (XForY | Discount | DiscountConditional)[]) {
+  return rules.reduce((previous, current) => {
     // this sorta acts like a type guard
     if (current.type == "xfory") {
       return {
@@ -95,7 +162,7 @@ function convertAPItoRules(input: (XForY | Discount | DiscountConditional)[]) {
               return cartCount * NORMAL_PRICE["standard"];
             }
 
-            // this wouldn't work for more than 3 items
+            // what this means is that once the offer has been applied, it won't be applied again
             return (
               (cartCount - current.reduceCountBy) * NORMAL_PRICE["standard"]
             );

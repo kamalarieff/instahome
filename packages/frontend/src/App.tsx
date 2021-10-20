@@ -1,16 +1,9 @@
 import { useReducer, useState } from "react";
+import { useQuery } from "react-query";
 import logo from "./logo.svg";
 import "./App.css";
 
-import { calculateTotal } from "utils/engine";
-
-const buyers = [
-  "fake company",
-  "uem sunrise",
-  "sime darby",
-  "igb berhad",
-  "mah sing group",
-];
+import { convertAPItoRules, calculateTotalByRules } from "utils/engine";
 
 const INITIAL_STATE: string[] = [];
 
@@ -20,7 +13,7 @@ function reducer(state: typeof INITIAL_STATE, action: { type: string }) {
       return [...state, "standard"];
     }
     // TODO: I don't think this is the best way to structure the data
-    // Find a better way to do this
+    // a better way to do this is not to store it in an array but in an map instead
     case "REMOVE_STANDARD": {
       const copy = [...state];
       const index = state.indexOf("standard");
@@ -58,6 +51,34 @@ function App() {
   const [state, dispatch] = useReducer(reducer, []);
   const [buyer, setBuyer] = useState<string>();
 
+  // TODO: fix type
+  const { data: companyList = [], isSuccess } = useQuery(
+    ["companies"],
+    async function fetchCompanies() {
+      const res = await fetch("http://localhost:3001/api/v1/companies");
+      return res.json();
+    }
+  );
+
+  const { data: companyData = [] } = useQuery<
+    (XForY | Discount | DiscountConditional)[]
+  >(
+    ["companyId", buyer],
+    async function fetchCompanyById() {
+      const res = await fetch(
+        `http://localhost:3001/api/v1/companies/${buyer}`
+      );
+      return res.json();
+    },
+    // TODO: if you do this, you might get unexpected behavior where
+    // If you choose a company that does not have any rules, it will use the previous chosen rule
+    { initialData: [], enabled: buyer != null }
+  );
+
+  // TODO: need to handle onLoad when no option is given
+  // right now it is defaulted to use the normal rules
+  const rules = convertAPItoRules(companyData);
+
   return (
     <div className="App">
       <main className="App-header flex space-y-2">
@@ -71,11 +92,12 @@ function App() {
             setBuyer(e.target.value);
           }}
         >
-          {buyers.map((buyer) => (
-            <option key={buyer} value={buyer}>
-              {buyer}
-            </option>
-          ))}
+          {isSuccess &&
+            companyList.map((buyer) => (
+              <option key={buyer.id} value={buyer.id}>
+                {buyer.name}
+              </option>
+            ))}
         </select>
         <div className="flex-col space-y-2">
           <div className="flex space-x-2">
@@ -124,7 +146,7 @@ function App() {
         <div>
           Chosen values: <pre>{state}</pre>{" "}
         </div>
-        <p>Total is: {calculateTotal(buyer, state)}</p>
+        <p>Total is: {calculateTotalByRules(state, rules)}</p>
       </main>
     </div>
   );
