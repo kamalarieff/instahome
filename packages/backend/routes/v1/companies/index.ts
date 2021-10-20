@@ -8,6 +8,7 @@ const companies: Company[] = [
   { id: 2, name: "sime darby" },
   { id: 3, name: "igb berhad" },
   { id: 4, name: "mah sing group" },
+  { id: 5, name: "yoghirt" },
 ];
 
 type DataType = { [key: number]: Offers[] };
@@ -64,7 +65,8 @@ router.get("/", function (_, res) {
 
 /* GET companies offer details. */
 router.get("/:id", function (req, res) {
-  res.json(data[parseInt(req.params.id)]);
+  const offerData = data[parseInt(req.params.id)] ?? [];
+  res.json(offerData);
 });
 
 export default router;
