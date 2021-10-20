@@ -1,11 +1,6 @@
 import { useReducer, useState } from "react";
 import { useQuery } from "react-query";
-import type {
-  XForY,
-  Discount,
-  DiscountConditional,
-  Company,
-} from "@instahome/types";
+import type { Company, Offers } from "@instahome/types";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -65,9 +60,7 @@ function App() {
     }
   );
 
-  const { data: companyData = [] } = useQuery<
-    (XForY | Discount | DiscountConditional)[]
-  >(
+  const { data: companyData = [] } = useQuery<Offers[]>(
     ["companyId", buyer],
     async function fetchCompanyById() {
       const res = await fetch(
@@ -149,7 +142,7 @@ function App() {
           </div>
         </div>
         <div>
-          Chosen values: <pre>{state}</pre>{" "}
+          Chosen values: <pre>{state.map((item) => `${item},`)}</pre>{" "}
         </div>
         <p>Total is: {calculateTotalByRules(state, rules)}</p>
       </main>

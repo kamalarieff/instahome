@@ -1,10 +1,4 @@
-import type {
-  ADID_TYPE,
-  NormalRulesType,
-  XForY,
-  Discount,
-  DiscountConditional,
-} from "@instahome/types";
+import type { ADID_TYPE, NormalRulesType, Offers } from "@instahome/types";
 import { normalRules } from "./rules";
 import { NORMAL_PRICE } from "utils/constants";
 
@@ -136,7 +130,7 @@ function calculateTotalByRules(cart: string[], rules: NormalRulesType) {
  * The final rule object will not apply both standard rule. Instead, the second rule will
  * override the first one
  */
-function convertAPItoRules(rules: (XForY | Discount | DiscountConditional)[]) {
+function convertAPItoRules(rules: Offers[]) {
   return rules.reduce((previous, current) => {
     // this sorta acts like a type guard
     switch (current.type) {

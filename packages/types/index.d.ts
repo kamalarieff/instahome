@@ -39,4 +39,6 @@ declare module "@instahome/types" {
     id: number;
     name: string;
   }
+
+  type Offers = XForY | Discount | DiscountConditional;
 }

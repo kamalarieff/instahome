@@ -1,10 +1,5 @@
 import express from "express";
-import type {
-  XForY,
-  Discount,
-  DiscountConditional,
-  Company,
-} from "@instahome/types";
+import type { Offers, Company } from "@instahome/types";
 
 const router = express.Router();
 
@@ -15,7 +10,7 @@ const companies: Company[] = [
   { id: 4, name: "mah sing group" },
 ];
 
-type DataType = { [key: number]: (XForY | Discount | DiscountConditional)[] };
+type DataType = { [key: number]: Offers[] };
 
 const data: DataType = {
   1: [
