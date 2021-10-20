@@ -142,12 +142,12 @@ function convertAPItoRules(rules: Offers[]) {
               const isEligible = cartCount >= current.eligibleLimit;
 
               if (!isEligible) {
-                return cartCount * NORMAL_PRICE["standard"];
+                return cartCount * NORMAL_PRICE[current.adId];
               }
 
               // what this means is that once the offer has been applied, it won't be applied again
               return (
-                (cartCount - current.reduceCountBy) * NORMAL_PRICE["standard"]
+                (cartCount - current.reduceCountBy) * NORMAL_PRICE[current.adId]
               );
             },
           },
@@ -171,7 +171,7 @@ function convertAPItoRules(rules: Offers[]) {
               const isEligible = cartCount >= current.eligibleLimit;
 
               if (!isEligible) {
-                return cartCount * NORMAL_PRICE["premium"];
+                return cartCount * NORMAL_PRICE[current.adId];
               }
 
               return cartCount * current.newPrice;
