@@ -2,7 +2,7 @@ import { useReducer, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-import { calculateTotal } from "./utils";
+import { calculateTotal } from "utils";
 
 const buyers = [
   "fake company",

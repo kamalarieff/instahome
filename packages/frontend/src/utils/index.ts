@@ -1,4 +1,4 @@
-import { NORMAL_PRICE } from "./constants";
+import { NORMAL_PRICE } from "utils/constants";
 
 interface SpecialRulesType {
   [key: string]: {
