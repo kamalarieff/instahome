@@ -110,8 +110,6 @@ function Container({ children }: Props) {
       const res = await fetchCompanyById(buyer);
       return res.json();
     },
-    // TODO: if you do this, you might get unexpected behavior where
-    // If you choose a company that does not have any rules, it will use the previous chosen rule
     { initialData: [], enabled: buyer != null }
   );
 
