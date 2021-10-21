@@ -54,6 +54,10 @@ The documentation for the API is written using swagger. You can check it out by 
 
 ### Technologies
 
+#### Project
+
+I'm using lerna to host the front end, back end and the types. By using lerna, it is easier to get everything up and running with a single command.
+
 #### Front end
 
 React for components. Vite for building. Tailwind for UI styling. React-query to fetch data from the API. Jest for testing. eslint and prettier for code formatting.
