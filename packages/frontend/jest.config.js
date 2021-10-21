@@ -83,6 +83,10 @@ module.exports = {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
     "^utils(.*)$": "<rootDir>/src/utils$1",
+    "^apis(.*)$": "<rootDir>/src/apis$1",
+    "^configs(.*)$": "<rootDir>/src/configs$1",
+    ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|svg)$":
+      "jest-transform-stub",
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

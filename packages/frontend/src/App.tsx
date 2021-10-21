@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
 import { useQuery } from "react-query";
 import type { Company, Offers } from "@instahome/types";
 
@@ -83,6 +83,7 @@ function App() {
         {isSuccess && (
           <select
             id="buyers"
+            data-testid="select-option"
             name="buyers"
             className="text-black"
             onChange={(e) => {
