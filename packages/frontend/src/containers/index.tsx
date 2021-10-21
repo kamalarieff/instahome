@@ -70,7 +70,14 @@ interface Props {
   }) => JSX.Element;
 }
 
-function App({ children }: Props) {
+/**
+ * @description Since this is a container, it shouldn't have any responsibility in terms of UI.
+ * Containers should only have business logic.
+ *
+ * It exposes a children as a function so it is up to the calling component to determine which
+ * property it wants to use
+ */
+function Container({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, []);
   const [buyer, setBuyer] = useState<string>();
 
@@ -124,4 +131,4 @@ function App({ children }: Props) {
 }
 
 // TODO: find a better name for this
-export default App;
+export default Container;
