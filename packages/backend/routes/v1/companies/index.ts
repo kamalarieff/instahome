@@ -58,12 +58,83 @@ const data: DataType = {
   ],
 };
 
-/* GET list of companies. */
+/**
+ * @swagger
+ *
+ * /api/v1/companies:
+ *   get:
+ *     summary: Get the list of companies
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: json list of companies
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: number
+ *                    description: id of company
+ *                    example: 1
+ *                  name:
+ *                    type: string
+ *                    description: name of company
+ *                    example: uem sunrise
+ */
 router.get("/", function (_, res) {
   res.json(companies);
 });
 
-/* GET companies offer details. */
+/**
+ * @swagger
+ *
+ * /api/v1/companies/{id}:
+ *   get:
+ *     summary: Get companies offer details
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: company id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: json list of offer rules
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  adId:
+ *                    type: number
+ *                    description: type of ad id
+ *                    example: standard
+ *                  type:
+ *                    type: string
+ *                    description: type of offer
+ *                    example: discount
+ *                  eligibleLimit:
+ *                    type: number
+ *                    description: number where this offer will become eligible
+ *                    example: 4
+ *                  reduceCountBy:
+ *                    type: number
+ *                    description: this is for those x for y offers
+ *                    example: 4
+ *                  newPrice:
+ *                    type: number
+ *                    description: offered price
+ *                    example: 420
+ */
 router.get("/:id", function (req, res) {
   const offerData = data[parseInt(req.params.id)] ?? [];
   res.json(offerData);
