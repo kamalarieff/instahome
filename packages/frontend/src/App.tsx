@@ -19,6 +19,11 @@ function App() {
             setCompany,
           }) => (
             <>
+              <h6 className="max-w-lg">
+                In normal circumstances, you&apos;d have to log in to your
+                company. But for the sake of testing, you can just choose your
+                company.
+              </h6>
               <select
                 id="buyers"
                 data-testid="select-option"
@@ -37,26 +42,38 @@ function App() {
               </select>
               <div className="flex-col space-y-2">
                 <div className="flex space-x-2">
-                  <button type="button" onClick={standard.add}>
+                  <button type="button" onClick={standard.add} className="add">
                     add standard
                   </button>
-                  <button type="button" onClick={standard.remove}>
+                  <button
+                    type="button"
+                    onClick={standard.remove}
+                    className="remove"
+                  >
                     remove standard
                   </button>
                 </div>
                 <div className="flex space-x-2">
-                  <button type="button" onClick={featured.add}>
+                  <button type="button" onClick={featured.add} className="add">
                     add featured
                   </button>
-                  <button type="button" onClick={featured.remove}>
+                  <button
+                    type="button"
+                    onClick={featured.remove}
+                    className="remove"
+                  >
                     remove featured
                   </button>
                 </div>
                 <div className="flex space-x-2">
-                  <button type="button" onClick={premium.add}>
+                  <button type="button" onClick={premium.add} className="add">
                     add premium
                   </button>
-                  <button type="button" onClick={premium.remove}>
+                  <button
+                    type="button"
+                    onClick={premium.remove}
+                    className="remove"
+                  >
                     remove premium
                   </button>
                 </div>
