@@ -1,4 +1,6 @@
 import express from "express";
+import { param, validationResult } from "express-validator";
+
 import { companies, companyOffers } from "../../../data";
 
 const router = express.Router();
@@ -80,9 +82,18 @@ router.get("/", function (_, res) {
  *                    description: offered price
  *                    example: 420
  */
-router.get("/:id", function (req, res) {
-  const offerData = companyOffers[parseInt(req.params.id)] ?? [];
-  res.json(offerData);
-});
+router.get(
+  "/:id",
+  param("id").exists().isNumeric().withMessage("id must be a number"),
+  function (req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const offerData = companyOffers[parseInt(req.params?.id)] ?? [];
+    res.json(offerData);
+  }
+);
 
 export default router;
