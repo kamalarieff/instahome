@@ -85,6 +85,7 @@ module.exports = {
     "^utils(.*)$": "<rootDir>/src/utils$1",
     "^apis(.*)$": "<rootDir>/src/apis$1",
     "^configs(.*)$": "<rootDir>/src/configs$1",
+    "^containers(.*)$": "<rootDir>/src/containers$1",
     ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|svg)$":
       "jest-transform-stub",
   },
