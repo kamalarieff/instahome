@@ -56,7 +56,7 @@ The documentation for the API is written using swagger. You can check it out by 
 
 #### Project
 
-I'm using lerna to host the front end, back end and the types. By using lerna, it is easier to get everything up and running with a single command.
+I'm using lerna to host the front end, back end and the types. By using lerna, it is easier to get everything up and running with a single command. Lint-staged to run commands on staged files. Husky for git hooks.
 
 #### Front end
 
