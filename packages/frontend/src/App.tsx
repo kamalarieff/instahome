@@ -2,15 +2,12 @@ import React from "react";
 
 import Container from "containers";
 
-import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <main className="App-header flex space-y-2">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
+      <main className="App-header flex space-y-8">
         <Container>
           {({
             standard,
@@ -22,24 +19,22 @@ function App() {
             setCompany,
           }) => (
             <>
-              {
-                <select
-                  id="buyers"
-                  data-testid="select-option"
-                  name="buyers"
-                  className="text-black"
-                  onChange={(e) => {
-                    setCompany(e.target.value);
-                  }}
-                  defaultValue={0}
-                >
-                  {[...companyList, { id: 0, name: "none" }].map((buyer) => (
-                    <option key={buyer.id} value={buyer.id}>
-                      {buyer.name}
-                    </option>
-                  ))}
-                </select>
-              }
+              <select
+                id="buyers"
+                data-testid="select-option"
+                name="buyers"
+                className="text-black"
+                onChange={(e) => {
+                  setCompany(e.target.value);
+                }}
+                defaultValue={0}
+              >
+                {[...companyList, { id: 0, name: "none" }].map((buyer) => (
+                  <option key={buyer.id} value={buyer.id}>
+                    {buyer.name}
+                  </option>
+                ))}
+              </select>
               <div className="flex-col space-y-2">
                 <div className="flex space-x-2">
                   <button type="button" onClick={standard.add}>
@@ -66,7 +61,7 @@ function App() {
                   </button>
                 </div>
               </div>
-              <div>
+              <div className="h-32">
                 Chosen values: <pre>{cart.map((item) => `${item},`)}</pre>{" "}
               </div>
               <p>Total is: {total}</p>
