@@ -220,4 +220,4 @@ const Checkout = {
   },
 };
 
-export { convertAPItoRules, Checkout };
+export { convertAPItoRules, groupCartCountById, Checkout };

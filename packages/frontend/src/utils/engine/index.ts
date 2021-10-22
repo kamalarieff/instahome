@@ -1,1 +1,1 @@
-export { convertAPItoRules, Checkout } from "./functions";
+export { convertAPItoRules, groupCartCountById, Checkout } from "./functions";

@@ -1,5 +1,7 @@
 import React from "react";
 
+import { groupCartCountById } from "utils/engine";
+
 import Container from "containers";
 import Button from "components/Button";
 
@@ -68,7 +70,8 @@ function App() {
                 </div>
               </div>
               <div className="h-32">
-                Chosen values: <pre>{cart.map((item) => `${item},`)}</pre>{" "}
+                Chosen values:{" "}
+                <pre>{JSON.stringify(groupCartCountById(cart))}</pre>{" "}
               </div>
               <p>Total is: {total}</p>
             </>
