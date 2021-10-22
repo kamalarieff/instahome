@@ -1,0 +1,13 @@
+.button {
+    @apply inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 bg-gray-900 rounded-lg hover:bg-gray-800 focus:ring focus:outline-none
+}
+
+.add {
+    composes: button;
+    @apply bg-green-900 hover:bg-green-800
+}
+
+.remove {
+    composes: button;
+    @apply bg-red-900 hover:bg-red-800
+}

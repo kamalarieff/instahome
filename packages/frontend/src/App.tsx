@@ -1,6 +1,7 @@
 import React from "react";
 
 import Container from "containers";
+import Button from "components/Button";
 
 import "./App.css";
 
@@ -42,40 +43,28 @@ function App() {
               </select>
               <div className="flex-col space-y-2">
                 <div className="flex space-x-2">
-                  <button type="button" onClick={standard.add} className="add">
+                  <Button onClick={standard.add} variant="add">
                     add standard
-                  </button>
-                  <button
-                    type="button"
-                    onClick={standard.remove}
-                    className="remove"
-                  >
+                  </Button>
+                  <Button onClick={standard.remove} variant="remove">
                     remove standard
-                  </button>
+                  </Button>
                 </div>
                 <div className="flex space-x-2">
-                  <button type="button" onClick={featured.add} className="add">
+                  <Button onClick={featured.add} variant="add">
                     add featured
-                  </button>
-                  <button
-                    type="button"
-                    onClick={featured.remove}
-                    className="remove"
-                  >
+                  </Button>
+                  <Button onClick={featured.remove} variant="remove">
                     remove featured
-                  </button>
+                  </Button>
                 </div>
                 <div className="flex space-x-2">
-                  <button type="button" onClick={premium.add} className="add">
+                  <Button onClick={premium.add} variant="add">
                     add premium
-                  </button>
-                  <button
-                    type="button"
-                    onClick={premium.remove}
-                    className="remove"
-                  >
+                  </Button>
+                  <Button onClick={premium.remove} variant="remove">
                     remove premium
-                  </button>
+                  </Button>
                 </div>
               </div>
               <div className="h-32">

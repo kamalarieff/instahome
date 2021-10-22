@@ -13,6 +13,10 @@ export default defineConfig({
         find: "containers",
         replacement: path.resolve(__dirname, "/src/containers"),
       },
+      {
+        find: "components",
+        replacement: path.resolve(__dirname, "/src/components"),
+      },
     ],
   },
   plugins: [react()],
