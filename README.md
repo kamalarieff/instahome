@@ -48,6 +48,10 @@ You can find the types in this directory `packages/types/index.d.ts`.
 
 Right now, the calculation is done on the front end. But it could easily be done on the back end. We just have to pass the cart values to an API.
 
+#### How to update the rules for the offers?
+
+You can go to `packages/backend/data/index.ts` to update them.
+
 ### API Docs
 
 The documentation for the API is written using swagger. You can check it out by running this project and go to http://localhost:3001/api-docs.
