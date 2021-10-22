@@ -39,31 +39,6 @@ function isAdIdType(adId: unknown): adId is ADID_TYPE {
 }
 
 /**
- * @description Get the sum from of the cart based on the rules given
- *
- * @param cart List of products
- * @param rules Rules object
- * @example
- * const rules = {...};
- * calculateTotalByRules([
- *   "standard",
- *   "featured",
- *   "premium",
- * ], rules);
- * //=> 999.99
- */
-function calculateTotalByRules(cart: string[], rules: NormalRulesType) {
-  const groupedCart = groupCartCountById(cart);
-  let sum = 0;
-
-  for (const property in groupedCart) {
-    // this is to guard yourself against unwanted ad types
-    if (isAdIdType(property)) sum += rules[property](groupedCart[property]);
-  }
-  return sum;
-}
-
-/**
  * @description Takes a list of rules and combine them to be an object rules. This object rules structure
  * makes it easy to find and apply the offer. It builds on the normal rules object which means it will override
  * any old ad id with its own. The shape of the rules in the list has to adhere to a certain contract.
@@ -186,4 +161,63 @@ function convertAPItoRules(rules: Offers[]) {
   }, normalRules);
 }
 
-export { calculateTotalByRules, convertAPItoRules };
+const Checkout = {
+  /**
+   * private cart variable
+   **/
+  _cart: [] as ADID_TYPE[],
+  /**
+   * private rules
+   **/
+  _rules: normalRules,
+  /**
+   * @function
+   * @description Sets the rules. Will default to the normal rules
+   **/
+  new: function (rules: NormalRulesType = normalRules) {
+    this._rules = rules;
+    return this;
+  },
+  /**
+   * @function
+   * @description Adds item to cart
+   * @param item Cart item. Only "standard", "featured", "premium" is allowed
+   **/
+  add: function (item: ADID_TYPE) {
+    this._cart.push(item);
+  },
+  /**
+   * @function
+   * @description Removes item from cart
+   * @param item Cart item. Only "standard", "featured", "premium" is allowed
+   **/
+  remove: function (item: ADID_TYPE) {
+    const index = this._cart.indexOf(item);
+    if (index == -1) return;
+    this._cart.splice(index, 1);
+  },
+  /**
+   * @function
+   * @description Clear the cart
+   **/
+  clear: function () {
+    this._cart = [];
+  },
+  /**
+   * @function
+   * @description Calculate the total
+   **/
+  total: function () {
+    const groupedCart = groupCartCountById(this._cart);
+    let sum = 0;
+
+    for (const property in groupedCart) {
+      // this is to guard yourself against unwanted ad types
+      if (isAdIdType(property))
+        sum += this._rules[property](groupedCart[property]);
+    }
+    return sum;
+  },
+};
+
+export { convertAPItoRules, Checkout };

@@ -2,7 +2,7 @@ import React, { useReducer, useState } from "react";
 import { useQuery } from "react-query";
 import type { Company, Offers } from "@instahome/types";
 
-import { convertAPItoRules, calculateTotalByRules } from "utils/engine";
+import { convertAPItoRules, Checkout } from "utils/engine";
 import { fetchCompanies, fetchCompanyById } from "apis/companies";
 
 const INITIAL_STATE: string[] = [];
@@ -81,21 +81,6 @@ function Container({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, []);
   const [buyer, setBuyer] = useState<string>();
 
-  const standard = {
-    add: () => dispatch({ type: "ADD_STANDARD" }),
-    remove: () => dispatch({ type: "REMOVE_STANDARD" }),
-  };
-
-  const featured = {
-    add: () => dispatch({ type: "ADD_FEATURED" }),
-    remove: () => dispatch({ type: "REMOVE_FEATURED" }),
-  };
-
-  const premium = {
-    add: () => dispatch({ type: "ADD_PREMIUM" }),
-    remove: () => dispatch({ type: "REMOVE_PREMIUM" }),
-  };
-
   const { data: companyList = [], isSuccess } = useQuery<Company[]>(
     ["companies"],
     async function () {
@@ -114,8 +99,42 @@ function Container({ children }: Props) {
   );
 
   const rules = convertAPItoRules(companyData);
+  const co = Checkout.new(rules);
 
-  const total = calculateTotalByRules(state, rules);
+  const standard = {
+    add: () => {
+      dispatch({ type: "ADD_STANDARD" });
+      co.add("standard");
+    },
+    remove: () => {
+      dispatch({ type: "REMOVE_STANDARD" });
+      co.remove("standard");
+    },
+  };
+
+  const featured = {
+    add: () => {
+      dispatch({ type: "ADD_FEATURED" });
+      co.add("featured");
+    },
+    remove: () => {
+      dispatch({ type: "REMOVE_FEATURED" });
+      co.remove("featured");
+    },
+  };
+
+  const premium = {
+    add: () => {
+      dispatch({ type: "ADD_PREMIUM" });
+      co.add("premium");
+    },
+    remove: () => {
+      dispatch({ type: "REMOVE_PREMIUM" });
+      co.remove("premium");
+    },
+  };
+
+  const total = co.total();
 
   return children({
     standard,

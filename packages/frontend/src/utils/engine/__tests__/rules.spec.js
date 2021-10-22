@@ -1,115 +1,153 @@
-import { calculateTotalByRules, convertAPItoRules } from "../functions";
+import { convertAPItoRules, Checkout } from "../functions";
 
-describe("calculate the total based on the rules", () => {
-  it("should transform API response to correct rules structure when none is given", () => {
-    const APIResponse = [];
-    const rules = convertAPItoRules(APIResponse);
-
-    let input = ["standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(269.99);
-
-    input = ["standard", "standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(539.98);
-
-    input = ["standard", "standard", "standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(809.97);
-
-    input = ["standard", "standard", "standard", "standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(1079.96);
-
-    input = ["standard", "featured", "premium"];
-    expect(calculateTotalByRules(input, rules)).toEqual(987.97);
+describe("Checkout implementation", () => {
+  beforeEach(() => {
+    Checkout.clear();
   });
 
-  it("should transform API response to correct rules structure for xfory", () => {
-    const APIResponse = [
-      {
-        adId: "standard",
-        type: "xfory",
-        eligibleLimit: 3,
-        reduceCountBy: 1,
-      },
-    ];
+  it("should return correct total with add and remove operations", () => {
+    const co = Checkout.new();
+    co.add("standard");
+    expect(co.total()).toEqual(269.99);
 
-    const rules = convertAPItoRules(APIResponse);
+    co.add("featured");
+    expect(co.total()).toEqual(592.98);
 
-    let input = ["standard", "standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(539.98);
+    co.add("premium");
+    expect(co.total()).toEqual(987.97);
 
-    input = ["standard", "standard", "standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(539.98);
+    co.remove("premium");
+    expect(co.total()).toEqual(592.98);
 
-    input = ["standard", "standard", "standard", "standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(809.97);
+    co.remove("featured");
+    expect(co.total()).toEqual(269.99);
 
-    input = ["standard", "standard", "standard", "premium"];
-    expect(calculateTotalByRules(input, rules)).toEqual(934.97);
+    co.remove("standard");
+    expect(co.total()).toEqual(0);
   });
 
-  it("should transform API response to correct rules structure for discount", () => {
-    const APIResponse = [
-      {
-        adId: "featured",
-        type: "discount",
-        newPrice: 299.99,
-      },
-    ];
-    const rules = convertAPItoRules(APIResponse);
+  it("should return correct total with clear operation", () => {
+    const co = Checkout.new();
+    co.add("standard");
+    co.add("featured");
+    co.add("premium");
+    expect(co.total()).toEqual(987.97);
 
-    let input = ["featured", "featured", "featured", "premium"];
-    expect(calculateTotalByRules(input, rules)).toEqual(1294.96);
+    co.clear();
+    expect(co.total()).toEqual(0);
   });
 
-  it("should transform API response to correct rules structure for discountconditional", () => {
-    const APIResponse = [
-      {
-        adId: "premium",
-        type: "discountconditional",
-        eligibleLimit: 4,
-        newPrice: 379.99,
-      },
-    ];
-    const rules = convertAPItoRules(APIResponse);
+  describe("custom rules", () => {
+    beforeEach(() => {
+      Checkout.clear();
+    });
 
-    let input = ["premium", "premium", "premium"];
-    expect(calculateTotalByRules(input, rules)).toEqual(1184.97);
+    it("should return correct total for x for y offers", () => {
+      const APIResponse = [
+        {
+          adId: "standard",
+          type: "xfory",
+          eligibleLimit: 3,
+          reduceCountBy: 1,
+        },
+      ];
 
-    input = ["premium", "premium", "premium", "premium"];
-    expect(calculateTotalByRules(input, rules)).toEqual(1519.96);
-  });
+      const rules = convertAPItoRules(APIResponse);
 
-  it("should transform API response to correct rules structure for multiple offers", () => {
-    const APIResponse = [
-      {
-        adId: "standard",
-        type: "xfory",
-        eligibleLimit: 3,
-        reduceCountBy: 1,
-      },
-      {
-        adId: "featured",
-        type: "discount",
-        newPrice: 299.99,
-      },
-      {
-        adId: "premium",
-        type: "discountconditional",
-        eligibleLimit: 3,
-        newPrice: 379.99,
-      },
-    ];
-    const rules = convertAPItoRules(APIResponse);
+      const co = Checkout.new(rules);
 
-    let input = ["premium", "premium", "premium", "premium", "featured"];
-    expect(calculateTotalByRules(input, rules)).toEqual(1819.95);
+      co.add("standard");
+      co.add("standard");
+      expect(co.total()).toEqual(539.98);
 
-    input = ["standard", "standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(539.98);
+      co.add("standard");
+      expect(co.total()).toEqual(539.98);
 
-    input = ["standard", "standard", "standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(539.98);
+      co.add("standard");
+      expect(co.total()).toEqual(809.97);
+    });
 
-    input = ["standard", "standard", "standard", "standard"];
-    expect(calculateTotalByRules(input, rules)).toEqual(809.97);
+    it("should transform API response to correct rules structure for discount", () => {
+      const APIResponse = [
+        {
+          adId: "featured",
+          type: "discount",
+          newPrice: 299.99,
+        },
+      ];
+      const rules = convertAPItoRules(APIResponse);
+
+      const co = Checkout.new(rules);
+
+      co.add("featured");
+      co.add("featured");
+      co.add("featured");
+      co.add("premium");
+      expect(co.total()).toEqual(1294.96);
+    });
+
+    it("should transform API response to correct rules structure for discountconditional", () => {
+      const APIResponse = [
+        {
+          adId: "premium",
+          type: "discountconditional",
+          eligibleLimit: 4,
+          newPrice: 379.99,
+        },
+      ];
+      const rules = convertAPItoRules(APIResponse);
+
+      const co = Checkout.new(rules);
+
+      co.add("premium");
+      co.add("premium");
+      co.add("premium");
+      expect(co.total()).toEqual(1184.97);
+
+      co.add("premium");
+      expect(co.total()).toEqual(1519.96);
+    });
+
+    it("should transform API response to correct rules structure for multiple offers", () => {
+      const APIResponse = [
+        {
+          adId: "standard",
+          type: "xfory",
+          eligibleLimit: 3,
+          reduceCountBy: 1,
+        },
+        {
+          adId: "featured",
+          type: "discount",
+          newPrice: 299.99,
+        },
+        {
+          adId: "premium",
+          type: "discountconditional",
+          eligibleLimit: 3,
+          newPrice: 379.99,
+        },
+      ];
+      const rules = convertAPItoRules(APIResponse);
+
+      const co = Checkout.new(rules);
+      co.add("premium");
+      co.add("premium");
+      co.add("premium");
+      co.add("premium");
+      co.add("featured");
+      expect(co.total()).toEqual(1819.95);
+
+      co.clear();
+      co.add("standard");
+      co.add("standard");
+      expect(co.total()).toEqual(539.98);
+
+      co.add("standard");
+      expect(co.total()).toEqual(539.98);
+
+      co.add("standard");
+      expect(co.total()).toEqual(809.97);
+    });
   });
 });

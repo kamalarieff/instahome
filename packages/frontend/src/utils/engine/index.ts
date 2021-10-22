@@ -1,1 +1,1 @@
-export { calculateTotalByRules, convertAPItoRules } from "./functions";
+export { convertAPItoRules, Checkout } from "./functions";

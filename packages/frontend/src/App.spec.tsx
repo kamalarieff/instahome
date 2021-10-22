@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "@testing-library/jest-dom";
 
-import * as engine from "utils/engine";
+import { Checkout } from "utils/engine";
 import { fetchCompanies, fetchCompanyById } from "apis/companies";
 
 jest.mock("apis/companies");
@@ -22,13 +22,14 @@ const queryClient = new QueryClient({
 });
 
 describe("App", () => {
-  const spy = jest.spyOn(engine, "calculateTotalByRules");
+  const spyAdd = jest.spyOn(Checkout, "add");
+  const spyRemove = jest.spyOn(Checkout, "remove");
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should call calculateTotalByRules with correct values when clicking on the buttons", async () => {
+  it("should call Checkout with correct values when clicking on the buttons", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <App />
@@ -37,28 +38,27 @@ describe("App", () => {
 
     // add and remove standard ads
     fireEvent.click(screen.getByText("add standard"));
-    // I don't really care what is passed on the 2nd argument
-    expect(spy).toHaveBeenLastCalledWith(["standard"], expect.anything());
+    expect(spyAdd).toHaveBeenLastCalledWith("standard");
 
     fireEvent.click(screen.getByText("remove standard"));
-    expect(spy).toHaveBeenLastCalledWith([], expect.anything());
+    expect(spyRemove).toHaveBeenLastCalledWith("standard");
 
     // add and remove featured ads
     fireEvent.click(screen.getByText("add featured"));
-    expect(spy).toHaveBeenLastCalledWith(["featured"], expect.anything());
+    expect(spyAdd).toHaveBeenLastCalledWith("featured");
 
     fireEvent.click(screen.getByText("remove featured"));
-    expect(spy).toHaveBeenLastCalledWith([], expect.anything());
+    expect(spyRemove).toHaveBeenLastCalledWith("featured");
 
     // add and remove premium ads
     fireEvent.click(screen.getByText("add premium"));
-    expect(spy).toHaveBeenLastCalledWith(["premium"], expect.anything());
+    expect(spyAdd).toHaveBeenLastCalledWith("premium");
 
     fireEvent.click(screen.getByText("remove premium"));
-    expect(spy).toHaveBeenLastCalledWith([], expect.anything());
+    expect(spyRemove).toHaveBeenLastCalledWith("premium");
   });
 
-  it("should call calculateTotalByRules with correct values when clicking on the buttons for more than one value", async () => {
+  it("should call Checkout with correct values when clicking on the buttons for more than one value", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <App />
@@ -66,47 +66,35 @@ describe("App", () => {
     );
 
     fireEvent.click(screen.getByText("add standard"));
-    // I don't really care what is passed on the 2nd argument
-    expect(spy).toHaveBeenLastCalledWith(["standard"], expect.anything());
+    expect(spyAdd).toHaveBeenLastCalledWith("standard");
 
     fireEvent.click(screen.getByText("add featured"));
-    expect(spy).toHaveBeenLastCalledWith(
-      ["standard", "featured"],
-      expect.anything()
-    );
+    expect(spyAdd).toHaveBeenLastCalledWith("featured");
 
     fireEvent.click(screen.getByText("add premium"));
-    expect(spy).toHaveBeenLastCalledWith(
-      ["standard", "featured", "premium"],
-      expect.anything()
-    );
+    expect(spyAdd).toHaveBeenLastCalledWith("premium");
 
     // remove them one by one again
 
     fireEvent.click(screen.getByText("remove standard"));
-    expect(spy).toHaveBeenLastCalledWith(
-      ["featured", "premium"],
-      expect.anything()
-    );
+    expect(spyRemove).toHaveBeenLastCalledWith("standard");
 
     fireEvent.click(screen.getByText("remove featured"));
-    expect(spy).toHaveBeenLastCalledWith(["premium"], expect.anything());
+    expect(spyRemove).toHaveBeenLastCalledWith("featured");
 
     fireEvent.click(screen.getByText("remove premium"));
-    expect(spy).toHaveBeenLastCalledWith([], expect.anything());
+    expect(spyRemove).toHaveBeenLastCalledWith("premium");
   });
 
-  it("should call calculateTotalByRules with correct values when removing non existent values", async () => {
+  it("should call Checkout with correct values when removing non existent values", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <App />
       </QueryClientProvider>
     );
 
-    expect(spy).toHaveBeenLastCalledWith([], expect.anything());
-
     fireEvent.click(screen.getByText("remove standard"));
-    expect(spy).toHaveBeenLastCalledWith([], expect.anything());
+    expect(spyRemove).toHaveBeenLastCalledWith("standard");
   });
 });
 
