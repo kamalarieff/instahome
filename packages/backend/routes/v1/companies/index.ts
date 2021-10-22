@@ -33,7 +33,7 @@ const router = express.Router();
  *                    example: uem sunrise
  */
 router.get("/", function (_, res) {
-  res.json(companies);
+  res.status(200).json(companies);
 });
 
 /**

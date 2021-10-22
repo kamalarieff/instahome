@@ -1,1 +1,1 @@
-export const COMPANIES_ENDPOINT = "http://localhost:3001/api/v1/companies";
+export const COMPANIES_ENDPOINT = `http://localhost:${import.meta.env.VITE_BACKEND_PORT}/api/v1/companies`;

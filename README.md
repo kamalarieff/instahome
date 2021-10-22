@@ -20,6 +20,8 @@ npm run bootstrap
 npm run start
 ```
 
+If you want to front end to communicate with the NestJS back end, change the `VITE_BACKEND_PORT` port in `packages/frontend/package.json:start` to 3002.
+
 ## Run tests
 
 ```sh
@@ -38,7 +40,7 @@ npm run test
 
 ### Ideology
 
-The rules are stored in the back end API. This part is the only tight coupling where the back end has to send a specific type of response in order for the front end to build the rules object.
+The rules are stored in the back end API (note that there are two implementation of the back end part, one in express and the other in NestJS). This part is the only tight coupling where the back end has to send a specific type of response in order for the front end to build the rules object.
 
 To understand what I mean, check out the tests from this file `packages/frontend/src/utils/engine/__tests__/rules.spec.js`.
 
@@ -51,6 +53,8 @@ Right now, the calculation is done on the front end. But it could easily be done
 #### How to update the rules for the offers?
 
 You can go to `packages/backend/data/index.ts` to update them.
+
+For the NestJS project, you can update the service file instead in `packages/nest/data/src/app.service.ts`.
 
 ### API Docs
 
@@ -68,7 +72,13 @@ React for components. Vite for building. Tailwind for UI styling. React-query to
 
 #### Back end
 
+##### Express
+
 Express for routing. Jest and supertest for testing. Express-validator for validating the params. Swagger for API documentation. 
+
+##### NestJS
+
+Kambiz mentioned you guys are using NestJS. I haven't used it before so I figured why not give it a try. I only had a couple of hours to play around with it so my implementation might be too rudimentary. I didn't have time to implement the same swagger document in NestJS project compared to the express one. 
 
 ### Issues
 
